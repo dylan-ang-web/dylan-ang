@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@dylan_ang</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<style>
+  /* =====================================================================
+     ✏️  GRID BACKGROUND SETTINGS
+     ===================================================================== */
+  :root {
+    --grid-color: 200, 162, 124;   /* light brown (r, g, b) */
+    --grid-opacity: .6;            /* 60% */
+    --grid-size: 40px;             /* space between lines */
+  }
+
+  *{box-sizing:border-box;margin:0;}
+  html{background:#fff;}
+  body{font-family:'Roboto',Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;position:relative;}
+
+  /* Grid lines behind everything (stays put while you scroll) */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-image:
+      linear-gradient(to right, rgba(var(--grid-color), var(--grid-opacity)) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(var(--grid-color), var(--grid-opacity)) 1px, transparent 1px);
+    background-size:var(--grid-size) var(--grid-size);
+    background-position:center top;
+  }
+
+  /* Page: one centered column that scales from phone to desktop */
+  .site-page{display:none;flex:1 0 auto;width:100%;max-width:860px;margin:0 auto;padding:28px clamp(10px,3vw,24px) 44px;}
+  .site-page.active{display:block;animation:iv-fade .35s ease;}
+  @keyframes iv-fade{from{opacity:0}to{opacity:1}}
+
+  /* Top row: profile picture + username, centered together */
+  .hero{display:flex;align-items:stretch;justify-content:center;gap:clamp(8px,2.4vw,22px);max-width:680px;margin:0 auto clamp(14px,3vw,28px);}
+  .avatar-frame{flex:none;width:clamp(96px,24vw,200px);aspect-ratio:1/1;}
+  .title-frame{flex:1 1 0;min-width:0;max-width:430px;}
+  .hero iframe,.shop-frame iframe{width:100%;height:100%;border:0;display:block;background:transparent;}
+
+  /* Shop: iframe grows to fit all listings, so the page scrolls naturally */
+  .shop-frame{width:100%;}
+  .shop-frame iframe{height:420px;}
+
+  .site-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:20px 28px;font-size:13px;flex-shrink:0;}
+  .site-footer .footer-custom{white-space:pre-wrap;opacity:.9;}
+  .site-footer .footer-watermark{color:inherit;text-decoration:none;opacity:.85;font-weight:500;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;}
+  .site-footer .footer-watermark:hover{opacity:1;text-decoration:underline;}
+  .site-footer .footer-watermark strong{font-weight:700;}
+</style>
+</head>
+<body>
+  <main class="site-page active" id="pg-index">
+    <section class="hero">
+      <div class="avatar-frame">
+        <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Profile picture&lt;/title&gt;
+
+&lt;!-- =====================================================================
+     ✏️  YOUR SETTINGS  —  the only part you need to edit
+     ===================================================================== --&gt;
+&lt;script&gt;
+  const SETTINGS = {
+    // Your profile picture
+    image: &quot;https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuVz2AZ44Xh7nX55spg0B6wK976vVDsdcsKvNC8Ovz9OJvEggT_uC7bPqs:https://cdn.playgrnd.media/v7/img/ph/usr_5d8abc4d-f612-4ded-ac2b-a6204250b21f/chd_bee61148-b21b-4524-8a41-7e9381631ab5/ph_f6afcf8a-c984-422a-a64c-e780f3b39b8f.jpg%3Fh%3D1920%26q%3D45%26w%3D1920&amp;s=10&quot;,
+
+    // Used automatically if the picture above doesn&#x27;t load. Leave &quot;&quot; for none.
+    backupImage: &quot;https://cdn.playgrnd.media/v7/img/ph/usr_5d8abc4d-f612-4ded-ac2b-a6204250b21f/chd_bee61148-b21b-4524-8a41-7e9381631ab5/ph_f6afcf8a-c984-422a-a64c-e780f3b39b8f.jpg?h=1920&amp;q=45&amp;w=1920&quot;,
+
+    // Biggest size it will grow to, in pixels (it shrinks to fit smaller frames)
+    maxSize: 260,
+
+    pageBackground: &quot;transparent&quot;     // or a color like &quot;#fbf3e9&quot;
+  };
+&lt;/script&gt;
+&lt;!-- ===================================================================== --&gt;
+
+&lt;style&gt;
+  :root { --brown-soft: #e6d0b8; --white: #fffaf4; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body { display: grid; place-items: center; padding: 12px; background: transparent; }
+
+  /* Always a centered circle that fits the frame, never cut off */
+  .wrap {
+    width: min(100%, calc(100vh - 24px), var(--max, 260px));
+    container-type: inline-size;
+  }
+  .avatar {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4cqw solid var(--white);
+    background: var(--brown-soft);
+    box-shadow: 0 14px 26px -10px rgba(166, 124, 82, .5);
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;wrap&quot; id=&quot;wrap&quot;&gt;&lt;img class=&quot;avatar&quot; id=&quot;pic&quot; alt=&quot;@dylan_ang profile picture&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+  document.documentElement.style.background = document.body.style.background = SETTINGS.pageBackground;
+  document.getElementById(&quot;wrap&quot;).style.setProperty(&quot;--max&quot;, SETTINGS.maxSize + &quot;px&quot;);
+
+  // Try the main picture first, then the backup if it fails to load
+  const urls = [SETTINGS.image, SETTINGS.backupImage].filter(Boolean);
+  const pic = document.getElementById(&quot;pic&quot;);
+  let i = 0;
+  pic.onerror = () =&gt; { if (++i &lt; urls.length) pic.src = urls[i]; };
+  if (urls.length) pic.src = urls[0];
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-scripts allow-same-origin allow-popups" title="Profile picture"></iframe>
+      </div>
+      <div class="title-frame">
+        <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Shop title&lt;/title&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Pacifico&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+
+&lt;!-- =====================================================================
+     ✏️  YOUR SETTINGS  —  the only part you need to edit
+     ===================================================================== --&gt;
+&lt;script&gt;
+  const SETTINGS = {
+    title: &quot;@dylan_ang&quot;,              // the text to show
+    pageBackground: &quot;transparent&quot;     // or a color like &quot;#fbf3e9&quot;
+  };
+&lt;/script&gt;
+&lt;!-- ===================================================================== --&gt;
+
+&lt;style&gt;
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    padding: 8px 16px;
+    background: transparent;
+  }
+  /* Light brown Pacifico text with a soft shadow. Scales with the frame width. */
+  h1 {
+    font-family: &quot;Pacifico&quot;, &quot;Brush Script MT&quot;, cursive;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+    color: #c8a27c;                       /* light brown */
+    font-size: clamp(1.6rem, 9vw, 3.2rem);
+    white-space: nowrap;
+    text-shadow: 0 2px 2px rgba(166, 124, 82, .35),
+                 0 8px 16px rgba(150, 125, 90, .35);
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1 id=&quot;t&quot;&gt;&lt;/h1&gt;
+&lt;script&gt;
+  document.documentElement.style.background = document.body.style.background = SETTINGS.pageBackground;
+  document.getElementById(&quot;t&quot;).textContent = SETTINGS.title;
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-scripts allow-same-origin allow-popups" title="@dylan_ang"></iframe>
+      </div>
+    </section>
+    <div class="shop-frame">
+      <iframe id="shopFrame" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;dylansboxslider&lt;/title&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&amp;family=Pacifico&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- =====================================================================
+     ✏️  YOUR SETTINGS  —  paste your Firebase config (same one as admin.html)
+     Listings themselves are now added/edited/marked sold in admin.html.
+     ===================================================================== --&gt;
+&lt;script&gt;
+  const FIREBASE_CONFIG = {
+    apiKey: &quot;AIzaSyAYtWNDeI9phVOzVO_cTOMDI5ZyPVBvj-E&quot;,
+    authDomain: &quot;depop-57ff9.firebaseapp.com&quot;,
+    projectId: &quot;depop-57ff9&quot;,
+    storageBucket: &quot;depop-57ff9.firebasestorage.app&quot;,
+    messagingSenderId: &quot;795901817136&quot;,
+    appId: &quot;1:795901817136:web:68b1f857af99b1f03e18f5&quot;
+  };
+
+  const SETTINGS = {
+    showControls: true,        // false = hide the search / sort / filter bar
+    showSold: true,            // true = sold items stay visible with a &quot;Sold&quot; label, false = hide them
+    slideTime: 3000,           // ms per image (3000 = 3 seconds)
+    pageBackground: &quot;transparent&quot;,   // or a color like &quot;#fbf3e9&quot;
+    emptyText: &quot;No listings right now, check back soon!&quot;
+  };
+  // Tip: add ?id=LISTING_ID to the page address to show just one listing.
+&lt;/script&gt;
+&lt;!-- ===================================================================== --&gt;
+
+&lt;style&gt;
+  :root { --light-brown:#c8a27c; --brown-soft:#e6d0b8; --brown-deep:#a67c52; --white:#fffaf4; }
+  * { box-sizing:border-box; margin:0; }
+  body { padding:20px; font-family:&quot;Pacifico&quot;,&quot;Brush Script MT&quot;,cursive; color:var(--brown-deep); }
+
+  /* Always 2 per row (laptop, PC and phone). Cards scale down to fit. */
+  #grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:44px 36px; max-width:780px; margin:0 auto; }
+  @media (max-width:620px) {
+    body { padding:10px; }
+    #grid { gap:26px 12px; }
+  }
+  .card { text-align:center; container-type:inline-size; }
+
+  .slider { position:relative; aspect-ratio:1/1; border-radius:7cqw; border:1.6cqw solid var(--white);
+            background:var(--brown-soft); overflow:hidden; box-shadow:0 18px 30px -12px rgba(166,124,82,.45); }
+  .slide { position:absolute; inset:0; opacity:0; transform:scale(1.06); transition:opacity .7s ease, transform 1.2s ease; }
+  .slide.active { opacity:1; transform:scale(1); }
+  .slide img { width:100%; height:100%; object-fit:cover; display:block; }
+  .caption { position:absolute; left:50%; bottom:8.5cqw; transform:translateX(-50%); padding:.3em 1em; white-space:nowrap; max-width:100%;
+             overflow:hidden; text-overflow:ellipsis; color:rgba(235,235,235,.9); text-shadow:0 1px 5px rgba(0,0,0,.4);
+             font-size:clamp(.62rem,4.4cqw,1.15rem); }
+  .card { --d:clamp(6px,3.4cqw,15px); }
+  .dots { position:absolute; left:50%; bottom:1.2cqw; transform:translateX(-50%); display:flex; gap:calc(var(--d)*.85); padding:2.2cqw 3cqw; }
+  .dot { width:var(--d); height:var(--d); border:0; padding:0; border-radius:50%; background:rgba(235,235,235,.4);
+         box-shadow:0 1px 4px rgba(0,0,0,.25); cursor:pointer; transition:width .3s ease, background .3s ease; }
+  .dot:hover { background:rgba(245,245,245,.7); }
+  .dot.active { width:calc(var(--d)*2.5); border-radius:999px; background:rgba(255,255,255,.95); }
+  .dot:focus-visible { outline:3px solid #fff; outline-offset:2px; }
+
+  /* Buy button: one clean line, full width of the card */
+  .buy-btn { display:flex; align-items:center; justify-content:center; gap:.4em; width:100%; margin-top:5cqw;
+             padding:2.8cqw 3cqw; border-radius:999px; color:#fff; text-decoration:none; white-space:nowrap;
+             background:linear-gradient(180deg, rgb(164,139,104), rgb(150,125,90));
+             font-family:&quot;Fredoka&quot;,&quot;Trebuchet MS&quot;,system-ui,sans-serif; font-weight:500; line-height:1.3;
+             font-size:clamp(.7rem,5.6cqw,1.25rem);
+             box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 10px 18px -8px rgba(150,125,90,.85);
+             transition:transform .2s ease, box-shadow .2s ease, filter .2s ease; }
+  a.buy-btn:hover { transform:translateY(-2px); filter:brightness(1.06); }
+  a.buy-btn:active { transform:translateY(1px); }
+  .buy-btn:focus-visible { outline:3px solid var(--brown-deep); outline-offset:3px; }
+
+  /* Price: top-left of the image, whitish like the dots and name */
+  .price-tag { position:absolute; top:3.5cqw; left:4.5cqw; z-index:1; text-align:left; line-height:1.15;
+               font-family:&quot;Fredoka&quot;,&quot;Trebuchet MS&quot;,system-ui,sans-serif; color:rgba(240,240,240,.92);
+               text-shadow:0 1px 5px rgba(0,0,0,.45); }
+  .pt-now { font-weight:600; font-size:clamp(.85rem,6.6cqw,1.7rem); }
+  .pt-sub { display:flex; gap:.55em; align-items:baseline; opacity:.85; font-size:clamp(.6rem,3.8cqw,.95rem); }
+  .pt-old { text-decoration:line-through; }
+  .depop-logo { font-size:1.2em; font-weight:600; }
+
+  /* Sold */
+  .sold .slide img { filter:grayscale(.7) brightness(.85); }
+  .sold-badge { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2; padding:.1em 1em;
+                border-radius:999px; background:rgba(255,255,255,.92); color:var(--brown-deep); font-size:clamp(.8rem,9cqw,2.2rem); }
+  .sold-btn { background:rgb(190,178,160); box-shadow:none; cursor:default; }
+
+  /* Search + filters: one slim row, filters tuck away so the listings stay the focus */
+  [hidden] { display:none !important; }
+  #bar { max-width:780px; margin:0 auto 18px; font-family:&quot;Fredoka&quot;,&quot;Trebuchet MS&quot;,system-ui,sans-serif; font-size:14px; color:var(--brown-deep); }
+  .bar-top { display:flex; gap:8px; }
+  #bar input[type=search] { flex:1; min-width:0; font:inherit; color:inherit; background:#fff; border:2px solid var(--brown-soft);
+        border-radius:999px; padding:.4em 1em; }
+  #bar input[type=search]:focus, #bar select:focus { outline:none; border-color:var(--light-brown); }
+  #ft { display:inline-flex; align-items:center; gap:.45em; font:inherit; color:inherit; background:#fff; border:2px solid var(--brown-soft);
+        border-radius:999px; padding:.4em 1em; cursor:pointer; white-space:nowrap; }
+  #ft[aria-expanded=&quot;true&quot;] { background:var(--brown-soft); }
+  #fc { background:rgb(150,125,90); color:#fff; border-radius:99px; min-width:1.5em; padding:0 .4em; font-size:.85em; text-align:center; }
+  #panel { margin-top:8px; background:#fff; border:2px solid var(--brown-soft); border-radius:20px; padding:10px 14px; display:grid; gap:6px; }
+  .filters { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px 12px; align-items:center; }
+  #bar select { width:100%; min-width:0; font:inherit; color:inherit; background:#fff; border:2px solid var(--brown-soft); border-radius:999px;
+        padding:.4em 1.7em .4em 1em; appearance:none; cursor:pointer;
+        background-image:linear-gradient(45deg,transparent 50%,var(--light-brown) 50%),linear-gradient(135deg,var(--light-brown) 50%,transparent 50%);
+        background-position:calc(100% - 17px) 55%, calc(100% - 12px) 55%; background-size:5px 5px; background-repeat:no-repeat; }
+  .chk { display:flex; align-items:center; gap:.5em; cursor:pointer; user-select:none; }
+  #bar .chk input { width:1.1em; height:1.1em; margin:0; accent-color:rgb(150,125,90); cursor:pointer; }
+  #clear { justify-self:end; border:0; background:none; color:inherit; font:inherit; font-size:.9em; text-decoration:underline; cursor:pointer; }
+  @media (max-width:620px) { #bar { font-size:16px; } }   /* 16px stops phones zooming in when you tap a field */
+
+  /* Price range: two draggable handles */
+  .range { grid-column:1 / -1; }
+  .range-label { display:flex; justify-content:space-between; }
+  .range-box { position:relative; height:30px; }
+  .track, .fill { position:absolute; top:50%; height:6px; margin-top:-3px; border-radius:99px; }
+  .track { left:0; right:0; background:var(--brown-soft); }
+  .fill { background:rgb(150,125,90); }
+  #bar .range-box input { position:absolute; inset:0; width:100%; height:100%; margin:0; padding:0; border:0; border-radius:0;
+         background:none; -webkit-appearance:none; appearance:none; pointer-events:none; }
+  .range-box input::-webkit-slider-runnable-track { height:30px; background:transparent; }
+  .range-box input::-moz-range-track { background:transparent; }
+  .range-box input::-webkit-slider-thumb { -webkit-appearance:none; pointer-events:auto; width:24px; height:24px; margin-top:3px;
+         border-radius:50%; background:#fff; border:3px solid rgb(150,125,90); box-shadow:0 2px 6px rgba(0,0,0,.2); cursor:grab; }
+  .range-box input::-moz-range-thumb { pointer-events:auto; width:18px; height:18px; border-radius:50%; background:#fff;
+         border:3px solid rgb(150,125,90); box-shadow:0 2px 6px rgba(0,0,0,.2); cursor:grab; }
+  .range-box input:active::-webkit-slider-thumb { cursor:grabbing; }
+
+  #msg { text-align:center; font-family:&quot;Fredoka&quot;,sans-serif; }
+  @media (prefers-reduced-motion:reduce) { .slide,.dot,.buy-btn { transition:none; } }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;bar&quot;&gt;
+  &lt;div class=&quot;bar-top&quot;&gt;
+    &lt;input id=&quot;q&quot; type=&quot;search&quot; placeholder=&quot;Search&quot; aria-label=&quot;Search listings&quot;&gt;
+    &lt;button id=&quot;ft&quot; type=&quot;button&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;panel&quot;&gt;Filters &lt;span id=&quot;fc&quot; hidden&gt;0&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;panel&quot; hidden&gt;
+    &lt;div class=&quot;filters&quot;&gt;
+      &lt;select id=&quot;sort&quot; aria-label=&quot;Sort&quot;&gt;
+        &lt;option value=&quot;new&quot;&gt;Newest&lt;/option&gt;
+        &lt;option value=&quot;low&quot;&gt;Price: low to high&lt;/option&gt;
+        &lt;option value=&quot;high&quot;&gt;Price: high to low&lt;/option&gt;
+        &lt;option value=&quot;deal&quot;&gt;Biggest discount&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;label class=&quot;chk&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;deal&quot;&gt; Discounted only&lt;/label&gt;
+      &lt;div class=&quot;range&quot; id=&quot;range&quot;&gt;
+        &lt;div class=&quot;range-label&quot;&gt;&lt;span&gt;Price&lt;/span&gt;&lt;b id=&quot;rl&quot;&gt;$0 – $0&lt;/b&gt;&lt;/div&gt;
+        &lt;div class=&quot;range-box&quot;&gt;
+          &lt;div class=&quot;track&quot;&gt;&lt;/div&gt;&lt;div class=&quot;fill&quot; id=&quot;fill&quot;&gt;&lt;/div&gt;
+          &lt;input type=&quot;range&quot; id=&quot;min&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;0&quot; step=&quot;1&quot; aria-label=&quot;Minimum price&quot;&gt;
+          &lt;input type=&quot;range&quot; id=&quot;max&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;100&quot; step=&quot;1&quot; aria-label=&quot;Maximum price&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button id=&quot;clear&quot; type=&quot;button&quot; hidden&gt;Clear all&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;grid&quot;&gt;&lt;/div&gt;
+&lt;p id=&quot;msg&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  /* Nothing to edit below. */
+  document.documentElement.style.background = document.body.style.background = SETTINGS.pageBackground;
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const db = firebase.firestore();
+  const grid = document.getElementById(&quot;grid&quot;), msg = document.getElementById(&quot;msg&quot;);
+  let timers = [];
+
+  const h = (tag, cls, text) =&gt; { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+  const money = n =&gt; &quot;$&quot; + (Number.isInteger(n) ? n : n.toFixed(2));
+  const num = v =&gt; parseFloat(String(v).replace(/[^0-9.]/g, &quot;&quot;));
+
+  function priceTag(L) {
+    const normal = num(L.price), sale = num(L.discountedPrice);
+    if (isNaN(normal) || normal &lt;= 0) return null;
+    const t = h(&quot;div&quot;, &quot;price-tag&quot;);
+    if (!isNaN(sale) &amp;&amp; sale &gt; 0 &amp;&amp; sale &lt; normal) {
+      const sub = h(&quot;div&quot;, &quot;pt-sub&quot;);
+      sub.append(h(&quot;span&quot;, &quot;pt-old&quot;, money(normal)), h(&quot;span&quot;, &quot;&quot;, Math.round((1 - sale / normal) * 100) + &quot;% off&quot;));
+      t.append(h(&quot;div&quot;, &quot;pt-now&quot;, money(sale)), sub);
+    } else t.append(h(&quot;div&quot;, &quot;pt-now&quot;, money(normal)));
+    return t;
+  }
+
+  function card(L) {
+    const imgs = (L.images || []).filter(i =&gt; i.url &amp;&amp; i.url.trim());
+    const wrap = h(&quot;div&quot;, &quot;card&quot; + (L.sold ? &quot; sold&quot; : &quot;&quot;));
+    const sl = h(&quot;div&quot;, &quot;slider&quot;); wrap.append(sl);
+    const slides = [], dots = []; let cur = 0, t;
+
+    imgs.forEach((it, i) =&gt; {
+      const s = h(&quot;div&quot;, &quot;slide&quot; + (i ? &quot;&quot; : &quot; active&quot;)), im = h(&quot;img&quot;);
+      im.src = it.url; im.alt = it.name || &quot;Image &quot; + (i + 1); im.loading = &quot;lazy&quot;;
+      s.append(im); if (it.name) s.append(h(&quot;div&quot;, &quot;caption&quot;, it.name));
+      sl.append(s); slides.push(s);
+    });
+    const go = n =&gt; {
+      slides[cur].classList.remove(&quot;active&quot;); dots[cur] &amp;&amp; dots[cur].classList.remove(&quot;active&quot;);
+      cur = (n + imgs.length) % imgs.length;
+      slides[cur].classList.add(&quot;active&quot;); dots[cur] &amp;&amp; dots[cur].classList.add(&quot;active&quot;);
+    };
+    const start = () =&gt; { clearInterval(t); t = setInterval(() =&gt; go(cur + 1), SETTINGS.slideTime); timers.push(t); };
+    if (imgs.length &gt; 1) {
+      const d = h(&quot;div&quot;, &quot;dots&quot;);
+      imgs.forEach((_, i) =&gt; {
+        const b = h(&quot;button&quot;, &quot;dot&quot; + (i ? &quot;&quot; : &quot; active&quot;)); b.setAttribute(&quot;aria-label&quot;, &quot;Go to image &quot; + (i + 1));
+        b.onclick = () =&gt; { go(i); start(); }; d.append(b); dots.push(b);
+      });
+      sl.append(d); start();
+    }
+    if (!L.sold) { const tag = priceTag(L); if (tag) sl.append(tag); }
+    if (L.sold) { sl.append(h(&quot;div&quot;, &quot;sold-badge&quot;, &quot;Sold&quot;)); wrap.append(h(&quot;span&quot;, &quot;buy-btn sold-btn&quot;, &quot;Sold&quot;)); return wrap; }
+
+    const a = h(&quot;a&quot;, &quot;buy-btn&quot;); a.href = L.link || &quot;#&quot;; a.target = &quot;_blank&quot;; a.rel = &quot;noopener&quot;;
+    const label = h(&quot;span&quot;); label.append(&quot;Buy on &quot;, h(&quot;span&quot;, &quot;depop-logo&quot;, &quot;depop&quot;)); a.append(label);
+    wrap.append(a); return wrap;
+  }
+
+  const only = new URLSearchParams(location.search).get(&quot;id&quot;);
+  const $ = id =&gt; document.getElementById(id);
+  if (!SETTINGS.showControls || only) $(&quot;bar&quot;).hidden = true;
+  let all = [];
+
+  const isDeal = L =&gt; { const n = num(L.price), d = num(L.discountedPrice); return !isNaN(n) &amp;&amp; !isNaN(d) &amp;&amp; d &gt; 0 &amp;&amp; d &lt; n; };
+  const eff = L =&gt; isDeal(L) ? num(L.discountedPrice) : num(L.price);          // price the buyer pays
+  const off = L =&gt; isDeal(L) ? 1 - num(L.discountedPrice) / num(L.price) : 0;  // discount amount (0-1)
+
+  function render() {
+    timers.forEach(clearInterval); timers = []; grid.innerHTML = &quot;&quot;;
+    const q = $(&quot;q&quot;).value.trim().toLowerCase(), lo = +$(&quot;min&quot;).value, hi = +$(&quot;max&quot;).value;
+    const deal = $(&quot;deal&quot;).checked, sort = $(&quot;sort&quot;).value;
+    const priceOn = lo &gt; 0 || hi &lt; +$(&quot;max&quot;).max;     // is the price range narrowed?
+    const n = (priceOn ? 1 : 0) + (deal ? 1 : 0) + (sort !== &quot;new&quot; ? 1 : 0);   // active filters
+    $(&quot;fc&quot;).textContent = n; $(&quot;fc&quot;).hidden = !n; $(&quot;clear&quot;).hidden = !(n || q);
+
+    const list = all.filter(({ id, L }) =&gt; {
+      if (only &amp;&amp; id !== only) return false;
+      if (L.sold &amp;&amp; !SETTINGS.showSold) return false;
+      if (q &amp;&amp; !(L.images || []).some(i =&gt; (i.name || &quot;&quot;).toLowerCase().includes(q))) return false;
+      const p = eff(L);
+      if (priceOn &amp;&amp; (isNaN(p) || p &lt; lo || p &gt; hi)) return false;
+      if (deal &amp;&amp; !isDeal(L)) return false;
+      return true;
+    });
+
+    const price = (L, empty) =&gt; isNaN(eff(L)) ? empty : eff(L);
+    if (sort === &quot;low&quot;) list.sort((a, b) =&gt; price(a.L, Infinity) - price(b.L, Infinity));
+    if (sort === &quot;high&quot;) list.sort((a, b) =&gt; price(b.L, -Infinity) - price(a.L, -Infinity));
+    if (sort === &quot;deal&quot;) list.sort((a, b) =&gt; off(b.L) - off(a.L));
+    list.sort((a, b) =&gt; !!a.L.sold - !!b.L.sold);   // sold items always go last (order above is kept)
+
+    list.forEach(({ L }) =&gt; grid.append(card(L)));
+    msg.textContent = list.length ? &quot;&quot; : all.length ? &quot;No listings match your filters.&quot; : SETTINGS.emptyText;
+  }
+
+  /* price slider: two handles, max follows your most expensive listing */
+  const mn = $(&quot;min&quot;), mx = $(&quot;max&quot;);
+  function syncRange() {
+    const top = +mx.max, lo = +mn.value, hi = +mx.value;
+    $(&quot;rl&quot;).textContent = &quot;$&quot; + lo + &quot; – $&quot; + hi;
+    const f = $(&quot;fill&quot;);
+    f.style.left = &quot;calc(12px + (100% - 24px) * &quot; + lo / top + &quot;)&quot;;
+    f.style.width = &quot;calc((100% - 24px) * &quot; + (hi - lo) / top + &quot;)&quot;;
+    mn.style.zIndex = lo &gt; top / 2 ? 3 : 1;   // keeps both handles grabbable when they meet
+    mx.style.zIndex = 2;
+  }
+  function updateBounds() {
+    const prices = all.map(x =&gt; eff(x.L)).filter(p =&gt; !isNaN(p));
+    $(&quot;range&quot;).hidden = !prices.length;
+    const top = Math.max(1, Math.ceil(Math.max(0, ...prices)));
+    const wasFull = +mx.value &gt;= +mx.max;
+    mn.max = mx.max = top;
+    if (wasFull || +mx.value &gt; top) mx.value = top;
+    if (+mn.value &gt; +mx.value) mn.value = mx.value;
+    syncRange();
+  }
+  mn.addEventListener(&quot;input&quot;, () =&gt; { if (+mn.value &gt; +mx.value) mn.value = mx.value; syncRange(); render(); });
+  mx.addEventListener(&quot;input&quot;, () =&gt; { if (+mx.value &lt; +mn.value) mx.value = mn.value; syncRange(); render(); });
+  $(&quot;ft&quot;).onclick = () =&gt; {
+    const open = $(&quot;panel&quot;).hidden; $(&quot;panel&quot;).hidden = !open; $(&quot;ft&quot;).setAttribute(&quot;aria-expanded&quot;, open);
+  };
+  $(&quot;q&quot;).addEventListener(&quot;input&quot;, render);
+  $(&quot;sort&quot;).addEventListener(&quot;change&quot;, render);
+  $(&quot;deal&quot;).addEventListener(&quot;change&quot;, render);
+  $(&quot;clear&quot;).onclick = () =&gt; {
+    $(&quot;q&quot;).value = &quot;&quot;; $(&quot;sort&quot;).value = &quot;new&quot;; $(&quot;deal&quot;).checked = false;
+    mn.value = 0; mx.value = mx.max; syncRange(); render();
+  };
+
+  db.collection(&quot;listings&quot;).orderBy(&quot;createdAt&quot;, &quot;desc&quot;).onSnapshot(snap =&gt; {
+    all = snap.docs.map(d =&gt; ({ id: d.id, L: d.data() }));
+    updateBounds();
+    render();
+  }, () =&gt; { msg.textContent = &quot;Couldn&#x27;t load listings. Check your Firebase settings.&quot;; });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox" title="Shop listings"></iframe>
+    </div>
+  </main>
+  <footer class="site-footer" style="background:#F1F3F4;color:#5F6368;font-family:'Roboto',sans-serif;">
+    <div class="footer-custom">2026 @dylan_ang - All Html & Branding Rights</div>
+  </footer>
+<script>
+function invisiGoTo(slug){
+  document.querySelectorAll('.site-page').forEach(function(p){ p.classList.remove('active'); });
+  var t = document.getElementById('pg-'+slug);
+  if(t) t.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Make the shop frame exactly as tall as its listings (no inner scrollbar) */
+(function(){
+  var f = document.getElementById('shopFrame');
+  function fit(){
+    try {
+      var d = f.contentDocument;
+      if(d && d.documentElement) f.style.height = Math.max(300, d.documentElement.scrollHeight) + 'px';
+    } catch(e){}
+  }
+  f.addEventListener('load', function(){
+    fit();
+    try { new ResizeObserver(fit).observe(f.contentDocument.body); } catch(e){}
+  });
+  window.addEventListener('resize', fit);
+})();
+
+(function(){
+  function ew(){
+    var f = document.querySelector('.site-footer');
+    if(!f){
+      f = document.createElement('footer');
+      f.className = 'site-footer';
+      f.style.cssText = 'display:flex;align-items:center;justify-content:flex-end;padding:14px 20px;';
+      document.body.appendChild(f);
+    }
+    if(f.querySelector('.footer-watermark')) return;
+    var a = document.createElement('a');
+    a.className = 'footer-watermark';
+    a.target = '_blank'; a.rel = 'noopener';
+    a.href = atob('aHR0cHM6Ly9pbnZpc2kuc2l0ZQ==');
+    a.innerHTML = atob('UG93ZXJlZCBieSA8c3Ryb25nPkludmlzaTwvc3Ryb25nPg==');
+    f.appendChild(a);
+  }
+  ew();
+  new MutationObserver(ew).observe(document.body, {childList:true, subtree:true});
+  setInterval(ew, 2000);
+})();
+</script>
+</body>
+</html>
